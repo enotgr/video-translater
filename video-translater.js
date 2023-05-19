@@ -21,14 +21,14 @@
 // @connect          api.browser.yandex.ru
 // ==/UserScript==
 
-const workerHost = "cors.yandexproxy.workers.dev";
+const workerHost = 'cors.yandexproxy.workers.dev';
 
-const yandexHmacKey = "gnnde87s24kcuMH8rbWhLyfeuEKDkGGm";
-const yandexUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 CriOS/104.0.5112.114 YaBrowser/22.9.4.633.10 SA/3 Mobile/15E148 Safari/604.1";
+const yandexHmacKey = 'gnnde87s24kcuMH8rbWhLyfeuEKDkGGm';
+const yandexUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 CriOS/104.0.5112.114 YaBrowser/22.9.4.633.10 SA/3 Mobile/15E148 Safari/604.1';
 const USOV4 = [ // Список расширений, последние версии которых не поддерживают Greasemonkey API V3
-  "Greasemonkey",
-  "Userscripts",
-  "FireMonkey"
+  'Greasemonkey',
+  'Userscripts',
+  'FireMonkey'
 ];
 
 if (typeof GM_addStyle === 'undefined') {
@@ -47,7 +47,7 @@ if (typeof GM_addStyle === 'undefined') {
 };
 
 if (!USOV4.includes(GM_info.scriptHandler)) {
-  const styles = GM_getResourceText("styles");
+  const styles = GM_getResourceText('styles');
   GM_addStyle(styles);
 } else {
   fetch('https://raw.githubusercontent.com/enotgr/video-translater/master/styles.css')
@@ -55,23 +55,23 @@ if (!USOV4.includes(GM_info.scriptHandler)) {
 };
 
 const $translationBlock = $(`
-  <div class = "translationBlock">
-      <span class = "translationArea" role = "button">
-          <span class = "translationIAlice" tabindex = "-1">
-              <img class = "translationImageAlice" src = "https://raw.githubusercontent.com/enotgr/video-translater/master/img/YAlice.svg">
+  <div class = 'translationBlock'>
+      <span class = 'translationArea' role = 'button'>
+          <span class = 'translationIAlice' tabindex = '-1'>
+              <img class = 'translationImageAlice' src = 'https://raw.githubusercontent.com/enotgr/video-translater/master/img/YAlice.svg'>
           </span>
-          <span class = "translationITranslate"  tabindex = "-1">
-              <img class = "translationImageTranslate" src = "https://icongr.am/entypo/language.svg?size=18&color=ffffff">
+          <span class = 'translationITranslate'  tabindex = '-1'>
+              <img class = 'translationImageTranslate' src = 'https://icongr.am/entypo/language.svg?size=18&color=ffffff'>
           </span>
-          <span class = "translationBtn" tabindex = "0">Перевести видео</span>
+          <span class = 'translationBtn' tabindex = '0'>Перевести видео</span>
       </span>
-      <span class = "translationMenu" tabindex = "0" role = "button"><img class = "translationMenuIcon" src = "https://icongr.am/entypo/dots-three-vertical.svg?size=14&color=ffffff"></span>
+      <span class = 'translationMenu' tabindex = '0' role = 'button'><img class = 'translationMenuIcon' src = 'https://icongr.am/entypo/dots-three-vertical.svg?size=14&color=ffffff'></span>
   </div>`);
 const $translationBtn = $translationBlock.find('.translationArea > .translationBtn');
 const $translationImageAlice = $translationBlock.find('.translationArea > .translationIAlice > img');
 const $translationImageTranslate = $translationBlock.find('.translationArea > .translationITranslate > img');
 
-const $translationMenuContent = $('<div class = "translationMenuContent"><p class = "translationMainHeader">Перевод видео</p></div>');
+const $translationMenuContent = $("<div class = 'translationMenuContent'><p class = 'translationMainHeader'>Перевод видео</p></div>");
 
 function addTranslationBtn(elem) {
   if (!$(elem).has($translationBlock).length) {
@@ -91,19 +91,19 @@ const getVideoId = (service) => {
   const url = new URL(window.location.href);
 
   if (service === 'youtube') {
-    if (url.pathname.includes("watch")) {
-      return url.searchParams.get("v");
+    if (url.pathname.includes('watch')) {
+      return url.searchParams.get('v');
     }
   
-    if (url.pathname.includes("embed")) {
+    if (url.pathname.includes('embed')) {
       return url.pathname.substr(7, 11);
     }
   } else if (service === 'vk') {
-    if (url.pathname.includes("video")) {
-      return url.searchParams.get("z").split('/')[0]; // Убираем постоянное значение "/pl_cat_trends"
+    if (url.pathname.includes('video')) {
+      return url.searchParams.get('z').split('/')[0]; // Убираем постоянное значение '/pl_cat_trends'
     }
   } else if (service === 'gag') {
-    if (url.pathname.includes("gag")) {
+    if (url.pathname.includes('gag')) {
       return url.pathname;
     }
   }
@@ -112,12 +112,12 @@ const getVideoId = (service) => {
 };
 
 const yandexRequests = (function() {
-    var protoRequest = new protobuf.Type("VideoTranslationRequest").add(new protobuf.Field("url", 3, "string")).add(new protobuf.Field("deviceId", 4, "string")).add(new protobuf.Field("unknown0", 5, "int32")).add(new protobuf.Field("unknown1", 6, "fixed64")).add(new protobuf.Field("unknown2", 7, "int32")).add(new protobuf.Field("language", 8, "string")).add(new protobuf.Field("unknown3", 9, "int32")).add(new protobuf.Field("unknown4", 10, "int32"));
-    var protoResponse = new protobuf.Type("VideoTranslationResponse").add(new protobuf.Field("url", 1, "string")).add(new protobuf.Field("status", 4, "int32"));
-    new protobuf.Root().define("yandex").add(protoRequest).add(protoResponse);
+    var protoRequest = new protobuf.Type('VideoTranslationRequest').add(new protobuf.Field('url', 3, 'string')).add(new protobuf.Field('deviceId', 4, 'string')).add(new protobuf.Field('unknown0', 5, 'int32')).add(new protobuf.Field('unknown1', 6, 'fixed64')).add(new protobuf.Field('unknown2', 7, 'int32')).add(new protobuf.Field('language', 8, 'string')).add(new protobuf.Field('unknown3', 9, 'int32')).add(new protobuf.Field('unknown4', 10, 'int32'));
+    var protoResponse = new protobuf.Type('VideoTranslationResponse').add(new protobuf.Field('url', 1, 'string')).add(new protobuf.Field('status', 4, 'int32'));
+    new protobuf.Root().define('yandex').add(protoRequest).add(protoResponse);
     return {
         encodeRequest: function(url, deviceId, unknown1) {
-            return protoRequest.encode({url: url, deviceId: deviceId, unknown0: 1, unknown1: unknown1, unknown2: 1, language: "en", unknown3: 0, unknown4: 0}).finish();
+            return protoRequest.encode({url: url, deviceId: deviceId, unknown0: 1, unknown1: unknown1, unknown2: 1, language: 'en', unknown3: 0, unknown4: 0}).finish();
         },
         decodeResponse: function(response) {
             return protoResponse.decode(new Uint8Array(response));
@@ -138,7 +138,7 @@ async function requestVideoTranslation(url, unknown1, callback) {
     var body = yandexRequests.encodeRequest(url, deviceId, unknown1);
 
     try {
-        var utf8Encoder = new TextEncoder("utf-8");
+        var utf8Encoder = new TextEncoder('utf-8');
         var key = await window.crypto.subtle.importKey('raw', utf8Encoder.encode(yandexHmacKey), { name: 'HMAC', hash: {name: 'SHA-256'}}, false, ['sign', 'verify']);
         var signature = await window.crypto.subtle.sign('HMAC', key, body);
         response = await fetch(`https://${workerHost}/video-translation/translate`, {
@@ -152,15 +152,15 @@ async function requestVideoTranslation(url, unknown1, callback) {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify({
                 headers: {
-                    "Accept": "application/x-protobuf",
-                    "Accept-Language": "en",
-                    "Content-Type": "application/x-protobuf",
-                    "User-Agent": yandexUserAgent,
-                    "Pragma": "no-cache",
-                    "Cache-Control": "no-cache",
-                    "Sec-Fetch-Mode": "no-cors",
-                    "Vtrans-Signature": Array.prototype.map.call(new Uint8Array(signature), x => x.toString(16).padStart(2, '0')).join(''),
-                    "Sec-Vtrans-Token": getUUID(false)
+                    'Accept': 'application/x-protobuf',
+                    'Accept-Language': 'en',
+                    'Content-Type': 'application/x-protobuf',
+                    'User-Agent': yandexUserAgent,
+                    'Pragma': 'no-cache',
+                    'Cache-Control': 'no-cache',
+                    'Sec-Fetch-Mode': 'no-cors',
+                    'Vtrans-Signature': Array.prototype.map.call(new Uint8Array(signature), x => x.toString(16).padStart(2, '0')).join(''),
+                    'Sec-Vtrans-Token': getUUID(false)
                 },
                 body: String.fromCharCode.apply(null, body)
             })
@@ -184,29 +184,29 @@ function translateVideo(url, unknown1, callback) {
     requestVideoTranslation(url, unknown1, function (success, response) {
         translationPanding = false;
         if (!success) {
-            callback(false, "Не удалось запросить перевод видео");
+            callback(false, 'Не удалось запросить перевод видео');
             return;
         }
 
         const translateResponse = yandexRequests.decodeResponse(response);
         switch (translateResponse.status) {
             case 0:
-                callback(false, "Невозможно перевести видео. Зайдите позже, нейронная сеть скоро научится");
+                callback(false, 'Невозможно перевести видео. Зайдите позже, нейронная сеть скоро научится');
                 return;
             case 1:
                 var hasUrl = void 0 !== translateResponse.url && null !== translateResponse.url;
-                callback(hasUrl, hasUrl ? translateResponse.url : "Не получена ссылка на аудио");
+                callback(hasUrl, hasUrl ? translateResponse.url : 'Не получена ссылка на аудио');
                 return;
             case 2:
-                callback(false, "Перевод займет около минуты");
+                callback(false, 'Перевод займет около минуты');
                 return;
         }
     });
 }
 
 const deleteAudioSrc = () => {
-  audio.src = "";
-  audio.removeAttribute("src");
+  audio.src = '';
+  audio.removeAttribute('src');
 };
 
 // --- IndexedDB functions start:
@@ -217,10 +217,10 @@ function openDB (name) {
 
 async function initDB () {
   return new Promise((resolve, reject) => {
-    var openRequest = openDB("VOT");
+    var openRequest = openDB('VT');
 
     openRequest.onerror = () => {
-      console.error("VOT: Ошибка инициализации Базы Данных: " + openRequest.errorCode);
+      console.error('VT: Ошибка инициализации Базы Данных: ' + openRequest.errorCode);
       reject(false);
     }
 
@@ -228,15 +228,15 @@ async function initDB () {
       var db = openRequest.result;
 
       db.onerror = () => {
-        alert('VOT: Не удалось загрузить базу данных')
-        console.error("VOT: Не удалось загрузить базу данных: " + openRequest.error);
+        alert('VT: Не удалось загрузить базу данных')
+        console.error('VT: Не удалось загрузить базу данных: ' + openRequest.error);
         reject(false);
       }
 
       var objectStore = db.createObjectStore('settings', {keyPath: 'key'});
 
       objectStore.createIndex('autoTranslate', 'autoTranslate', { unique: false })
-      console.log('VOT: База Данных создана')
+      console.log('VT: База Данных создана')
 
       objectStore.transaction.oncomplete = event => {
         var objectStore = db.transaction('settings', 'readwrite').objectStore('settings');
@@ -247,11 +247,11 @@ async function initDB () {
         var request = objectStore.add(contestsDefault);
 
         request.onsuccess = () => {
-          console.log("VOT: Стандартные настройки добавлены в Базу Данных: ", request.result);
+          console.log('VT: Стандартные настройки добавлены в Базу Данных: ', request.result);
           resolve(true);
         };
         request.onerror = () => {
-          console.log("VOT: Ошибка при добавление стандартных настроек в Базу Данных: ", request.error);
+          console.log('VT: Ошибка при добавление стандартных настроек в Базу Данных: ', request.error);
           reject(false);
         };
       };
@@ -261,8 +261,8 @@ async function initDB () {
       var db = openRequest.result;
       db.onversionchange = () => {
         db.close();
-        alert("Базе данных нужно обновление, пожалуйста, перезагрузите страницу.");
-        console.log("VOT: Базе данных нужно обновление, пожалуйста, перезагрузите страницу");
+        alert('Базе данных нужно обновление, пожалуйста, перезагрузите страницу.');
+        console.log('VT: Базе данных нужно обновление, пожалуйста, перезагрузите страницу');
         window.location.reload();
         reject(false);
       }
@@ -271,8 +271,8 @@ async function initDB () {
 
     openRequest.onblocked = () => {
       var db = openRequest.result;
-      console.error('VOT: База Данных временно заблокирована из-за ошибки: ', db);
-      alert("VOT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.");
+      console.error('VT: База Данных временно заблокирована из-за ошибки: ', db);
+      alert('VT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.');
       reject(false);
     };
   });
@@ -281,11 +281,11 @@ async function initDB () {
 async function updateDB(autoTranslate = undefined) {
   return new Promise((resolve, reject) => {
     if (autoTranslate !== undefined) {
-      var openRequest = openDB("VOT");
+      var openRequest = openDB('VT');
 
       openRequest.onerror = () => {
-        alert('VOT: Произошла ошибка');
-        console.error("VOT: Ошибка Базы Данных: " + openRequest.errorCode);
+        alert('VT: Произошла ошибка');
+        console.error('VT: Ошибка Базы Данных: ' + openRequest.errorCode);
         reject(false);
       };
 
@@ -300,7 +300,7 @@ async function updateDB(autoTranslate = undefined) {
         var db = openRequest.result;
         db.onversionchange = () => {
           db.close();
-          console.log("VOT: Базе данных нужно обновление, пожалуЙста, перезагрузите страницу");
+          console.log('VT: Базе данных нужно обновление, пожалуЙста, перезагрузите страницу');
           window.location.reload();
           reject(false);
         };
@@ -309,12 +309,12 @@ async function updateDB(autoTranslate = undefined) {
         var request = objectStore.get('settings');
 
         request.onerror = (event) => {
-          console.error("VOT: Не удалось получить данные из Базы Данных: ", event.error);
+          console.error('VT: Не удалось получить данные из Базы Данных: ', event.error);
           reject(false);
         };
 
         request.onsuccess = () => {
-          console.log('VOT: Получены данные из Базы Данных: ', request.result);
+          console.log('VT: Получены данные из Базы Данных: ', request.result);
           var data = request.result;
 
           if (typeof(autoTranslate) === 'number') {
@@ -324,12 +324,12 @@ async function updateDB(autoTranslate = undefined) {
           var requestUpdate = objectStore.put(data);
 
           requestUpdate.onerror = (event) =>{
-            console.error("VOT: Не удалось обновить данные в Базе Данных: ", event.error);
+            console.error('VT: Не удалось обновить данные в Базе Данных: ', event.error);
             reject(false);
           };
 
           requestUpdate.onsuccess = () => {
-            console.log('VOT: Данные в Базе Данных обновлены, вы великолепны!');
+            console.log('VT: Данные в Базе Данных обновлены, вы великолепны!');
             resolve(true);
           };
         };
@@ -337,8 +337,8 @@ async function updateDB(autoTranslate = undefined) {
 
       openRequest.onblocked = () => {
         var db = openRequest.result;
-        console.error('VOT: База Данных временно заблокирована из-за ошибки: ', db);
-        alert("VOT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.");
+        console.error('VT: База Данных временно заблокирована из-за ошибки: ', db);
+        alert('VT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.');
         reject(false);
       };
     };
@@ -347,11 +347,11 @@ async function updateDB(autoTranslate = undefined) {
 
 async function readDB() {
   return new Promise((resolve, reject) => {
-    var openRequest = openDB("VOT");
+    var openRequest = openDB('VT');
 
     openRequest.onerror = () => {
-      alert('VOT: Произошла ошибка');
-      console.error("VOT: Ошибка Базы Данных: " + openRequest.errorCode);
+      alert('VT: Произошла ошибка');
+      console.error('VT: Ошибка Базы Данных: ' + openRequest.errorCode);
       reject(false);
     }
 
@@ -366,7 +366,7 @@ async function readDB() {
       var db = openRequest.result;
       db.onversionchange = () => {
         db.close();
-        alert("VOT: База данных устарела, пожалуЙста, перезагрузите страницу.");
+        alert('VT: База данных устарела, пожалуЙста, перезагрузите страницу.');
         reject(false);
       }
 
@@ -374,13 +374,13 @@ async function readDB() {
       var request = objectStore.get('settings');
 
       request.onerror = (event) => {
-        console.error("VOT: Не удалось получить данные из Базы Данных: ", event.error);
+        console.error('VT: Не удалось получить данные из Базы Данных: ', event.error);
         console.error(event);
         reject(false);
       }
 
       request.onsuccess = () => {
-        console.log('VOT: Получены данные из Базы Данных: ', request.result);
+        console.log('VT: Получены данные из Базы Данных: ', request.result);
         if (request.result === undefined) {
           db.close()
           deleteDB();
@@ -393,33 +393,33 @@ async function readDB() {
 
     openRequest.onblocked = () => {
       var db = openRequest.result;
-      console.error('VOT: База Данных временно заблокирована из-за ошибки: ', db);
-      alert("VOT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.");
+      console.error('VT: База Данных временно заблокирована из-за ошибки: ', db);
+      alert('VT отключен из-за ошибки при обновление Базы Данных. Закройте все открытые вкладки с youtube.com и попробуйте снова.');
       reject(false);
     }
   });
 }
 
 function deleteDB() {
-  indexedDB.deleteDatabase('VOT');
+  indexedDB.deleteDatabase('VT');
 }
 
-$("body").on("yt-page-data-updated", async function () {
-  var video = $("video")[0];
+$('body').on('yt-page-data-updated', async function () {
+  var video = $('video')[0];
   var firstPlay = true;
   var isDBInited = await initDB().then(value => {return(value)}).catch(err => {console.error(err); return false});
-  addTranslationBtn(".html5-video-container");
-  addTranslationMenu(".html5-video-container");
+  addTranslationBtn('.html5-video-container');
+  addTranslationMenu('.html5-video-container');
   transformBtnDefault('Перевести видео')
   if (isDBInited) {
     var dbData = await readDB().then(value => {return(value)}).catch(err => {console.error(err); return false});
     var dbAT = dbData !== undefined ? dbData.autoTranslate : undefined;
-    console.log('VOT: DB autotranslate value: ', dbAT)
+    console.log('VT: DB autotranslate value: ', dbAT)
     if (!$('.translationAT').length && dbAT !== undefined) {
       var $translationATCont = $(
-        `<div class = "translationMenuContainer">
-          <input type="checkbox" name="auto_translate" value=${dbAT} class = "translationAT" ${dbAT === 1 ? "checked" : ''}>
-          <label class = "translationMenuText" for = "auto_translate">Автоматический перевод видео</label>
+        `<div class = 'translationMenuContainer'>
+          <input type='checkbox' name='auto_translate' value=${dbAT} class = 'translationAT' ${dbAT === 1 ? 'checked' : ''}>
+          <label class = 'translationMenuText' for = 'auto_translate'>Автоматический перевод видео</label>
         </div>
         `
       );
@@ -437,7 +437,7 @@ $("body").on("yt-page-data-updated", async function () {
   let btnHover = function () {
     let time;
     var isOpened = false;
-    var $translationMenu = $(".translationMenu");
+    var $translationMenu = $('.translationMenu');
 
     $translationMenu.on('click', (event) => {
       event.stopPropagation();
@@ -445,13 +445,13 @@ $("body").on("yt-page-data-updated", async function () {
       isOpened = !isOpened;
     })
 
-    $(".html5-video-container").on("mousemove", () => resetTimer());
-    $(".html5-video-container").on("mouseout", () => logout(0));
+    $('.html5-video-container').on('mousemove', () => resetTimer());
+    $('.html5-video-container').on('mouseout', () => logout(0));
 
-    $(document).on("click", (event) => {
+    $(document).on('click', (event) => {
       let isBlock = event.target == $($translationBlock)[0] || $($translationBlock)[0].contains(event.target);
       let isContent = event.target == $($translationMenuContent)[0] || $($translationMenuContent)[0].contains(event.target);
-      let isVideo = event.target == $(".html5-video-container")[0]|| $(".html5-video-container")[0].contains(event.target);
+      let isVideo = event.target == $('.html5-video-container')[0]|| $('.html5-video-container')[0].contains(event.target);
       if (!isBlock && !isContent) {
         $translationMenuContent.hide();
         isOpened = false
@@ -462,13 +462,13 @@ $("body").on("yt-page-data-updated", async function () {
       }
     })
 
-    $translationBlock.on("mousemove", (event) => {
+    $translationBlock.on('mousemove', (event) => {
       clearTimeout(time);
       logout(0.8);
       event.stopPropagation();
     });
 
-    $translationMenuContent.on("mousemove", (event) => {
+    $translationMenuContent.on('mousemove', (event) => {
       clearTimeout(time);
       logout(0.8);
       event.stopPropagation();
@@ -476,7 +476,7 @@ $("body").on("yt-page-data-updated", async function () {
 
     function logout(n) {
       if (!isOpened) {
-        $translationBlock.css("opacity", n);
+        $translationBlock.css('opacity', n);
       }
     }
 
@@ -503,36 +503,36 @@ $("body").on("yt-page-data-updated", async function () {
 
     audio.src = urlOrError;
 
-    $("body").on("yt-page-data-updated", function () {
+    $('body').on('yt-page-data-updated', function () {
       audio.pause();
-      $("video").off(".translate");
+      $('video').off('.translate');
       deleteAudioSrc();
     });
 
     if (!video.paused) {
-      lipSync("play");
+      lipSync('play');
     }
 
-    $("video").on("playing.translate ratechange.translate", function () {
+    $('video').on('playing.translate ratechange.translate', function () {
       lipSync();
     });
 
-    $("video").on("play.translate canplaythrough.translate", function () {
+    $('video').on('play.translate canplaythrough.translate', function () {
       lipSync();
 
       if (!video.paused) {
-        lipSync("play");
+        lipSync('play');
       }
     });
 
-    $("video").on("pause.translate waiting.translate", function () {
-      lipSync("pause");
+    $('video').on('pause.translate waiting.translate', function () {
+      lipSync('pause');
     });
 
     $translationBtn.text('Выключить');
-    changeColor("#A36EFF");
+    changeColor('#A36EFF');
     changeBackgroundSuccess();
-    const volumeBox = $('<div class = "translationMenuContainer"><span class = "translationHeader">Громкость перевода: <b class = "volumePercent">100%</b></span><div class = "translationVolumeBox" tabindex = "0"><input type="range" min="0" max="100" value="100" class="translationVolumeSlider"></div></div>');
+    const volumeBox = $("<div class = 'translationMenuContainer'><span class = 'translationHeader'>Громкость перевода: <b class = 'volumePercent'>100%</b></span><div class = 'translationVolumeBox' tabindex = '0'><input type='range' min='0' max='100' value='100' class='translationVolumeSlider'></div></div>");
     const volumeSlider = volumeBox.find('.translationVolumeSlider');
 
     if (!$translationMenuContent.has('.translationVolumeBox').length) {
@@ -547,7 +547,7 @@ $("body").on("yt-page-data-updated", async function () {
   });
 
   function changeColor(n) {
-    $translationBtn.css("color", n);
+    $translationBtn.css('color', n);
   }
 
   function changeBackgroundError() {
@@ -587,23 +587,23 @@ $("body").on("yt-page-data-updated", async function () {
       return;
     }
 
-    if (mode === "play") {
+    if (mode === 'play') {
       var audioPromise = audio.play();
       if (audioPromise !== undefined) {
         audioPromise.catch(e => {
           console.error(e)
-          if (e.name === "NotAllowedError") {
+          if (e.name === 'NotAllowedError') {
             transformBtnError('Предоставьте разрешение на автовоспроизведение')
-            throw "YaTranslate: Предоставьте разрешение на автовоспроизведение"
-          } else if (e.name === "NotSupportedError") {
+            throw 'YaTranslate: Предоставьте разрешение на автовоспроизведение'
+          } else if (e.name === 'NotSupportedError') {
             transformBtnError('Формат аудио не поддерживается')
-            throw "YaTranslate: Формат аудио не поддерживается"
+            throw 'YaTranslate: Формат аудио не поддерживается'
           }
         })
       }
     }
 
-    else if (mode === "pause") {
+    else if (mode === 'pause') {
       audio.pause();
     }
   };
@@ -614,7 +614,7 @@ $("body").on("yt-page-data-updated", async function () {
     const VIDEO_ID = getVideoId('youtube');
 
     if (!VIDEO_ID) {
-      throw "YaTranslate: Не найдено ID видео";
+      throw 'YaTranslate: Не найдено ID видео';
     }
 
     if (firstPlay && dbAT === 1) {
@@ -640,7 +640,7 @@ $("body").on("yt-page-data-updated", async function () {
       const VIDEO_ID = getVideoId('youtube');
 
       if (!VIDEO_ID) {
-        throw "YaTranslate: Не найдено ID видео"; // not found video id
+        throw 'YaTranslate: Не найдено ID видео'; // not found video id
       }
 
       translateYTFunc(VIDEO_ID)
