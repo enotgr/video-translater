@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name             voice-over-translation
-// @name:ru          [VOT] - Закадровый перевод видео
+// @name             video-translation
+// @name:ru          Закадровый перевод видео
 // @description      A small extension that adds a Yandex Browser video translation to other browsers
 // @description:ru   Небольшое расширение, которое добавляет закадровый перевод видео из Яндекс Браузера в другие браузеры
 // @version          1.0.8
