@@ -4,7 +4,7 @@
 // @description      A small extension that adds a Yandex Browser video translation to other browsers
 // @description:ru   Небольшое расширение, которое добавляет закадровый перевод видео из Яндекс Браузера в другие браузеры
 // @version          1.0.8
-// @author           sodapng, mynovelhost, Toil
+// @author           sodapng, mynovelhost, Toil, enotgr
 // @match            *://*.youtube.com/*
 // @icon             https://translate.yandex.ru/icons/favicon.ico
 // @require          https://code.jquery.com/jquery-3.6.0.min.js
